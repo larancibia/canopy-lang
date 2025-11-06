@@ -1,0 +1,13 @@
+strategy "My Strategy"
+
+# Define indicators
+fast_ma = sma(close, 50)
+slow_ma = sma(close, 200)
+
+# Define entry/exit rules
+buy when crossover(fast_ma, slow_ma)
+sell when crossunder(fast_ma, slow_ma)
+
+# Plotting
+plot(fast_ma, "Fast MA", color=blue)
+plot(slow_ma, "Slow MA", color=red)
