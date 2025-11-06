@@ -1,0 +1,25 @@
+strategy "Bollinger Band Squeeze"
+
+# Calculate Bollinger Bands
+upper, middle, lower = bollinger_bands(close, 20, 2.0)
+
+# Calculate band width (normalized)
+bandwidth = (upper - lower) / middle
+
+# Calculate momentum
+momentum = close - sma(close, 20)
+
+# Squeeze threshold (tight bands)
+squeeze_threshold = 0.05
+
+# Entry: Buy when bands are tight and momentum turns positive
+buy when bandwidth < squeeze_threshold and momentum > 0 and crossover(close, middle)
+
+# Exit: Sell when price reaches upper band or bands widen significantly
+sell when close > upper or bandwidth > (squeeze_threshold * 2)
+
+# Plot Bollinger Bands
+plot(upper, "Upper Band", color=red, style=dashed)
+plot(middle, "Middle Band (SMA 20)", color=blue)
+plot(lower, "Lower Band", color=green, style=dashed)
+plot(bandwidth * 100, "Bandwidth %", color=orange)

@@ -1,0 +1,27 @@
+strategy "Multi-Timeframe Trend"
+
+# Daily timeframe: Overall trend direction
+daily_ema_50 = ema(close, 50)  # Assume daily data
+daily_ema_200 = ema(close, 200)
+
+# Entry timeframe (current): RSI for timing entries
+rsi14 = rsi(close, 14)
+
+# Volume confirmation
+vol_avg = sma(volume, 20)
+high_volume = volume > (vol_avg * 1.2)
+
+# Trend filter: Only buy when daily trend is bullish
+# (fast MA above slow MA on daily timeframe)
+bullish_trend = daily_ema_50 > daily_ema_200
+
+# Entry: Buy when daily trend is up, RSI is oversold, and volume is high
+buy when bullish_trend and rsi14 < 40 and high_volume and close > daily_ema_50
+
+# Exit: Sell when RSI becomes overbought or daily trend reverses
+sell when rsi14 > 70 or daily_ema_50 < daily_ema_200
+
+# Plot indicators
+plot(daily_ema_50, "Daily EMA 50", color=blue)
+plot(daily_ema_200, "Daily EMA 200", color=red)
+plot(rsi14, "RSI(14)", color=purple)

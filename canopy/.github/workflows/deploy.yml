@@ -1,0 +1,78 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy-staging:
+    if: github.event.inputs.environment == 'staging' || (github.event_name == 'push' && !contains(github.ref, 'v'))
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment..."
+          # Add your staging deployment commands here
+          # Example: kubectl, aws cli, terraform, etc.
+
+      - name: Health check
+        run: |
+          echo "Running health check on staging..."
+          # curl https://staging-api.canopy-lang.com/health
+
+      - name: Notify deployment
+        run: |
+          echo "Staging deployment complete"
+
+  deploy-production:
+    if: github.event.inputs.environment == 'production' || (github.event_name == 'push' && contains(github.ref, 'v'))
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [deploy-staging]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment..."
+          # Add your production deployment commands here
+          # Example: kubectl apply, helm upgrade, etc.
+
+      - name: Health check
+        run: |
+          echo "Running health check on production..."
+          # curl https://api.canopy-lang.com/health
+
+      - name: Notify deployment
+        run: |
+          echo "Production deployment complete"
+          # Send notifications (Slack, Discord, email, etc.)
+
+  rollback:
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+
+    steps:
+      - name: Rollback deployment
+        run: |
+          echo "Rolling back deployment..."
+          # Add rollback commands here

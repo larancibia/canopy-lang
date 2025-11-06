@@ -1,0 +1,34 @@
+strategy "Sector Rotation - Relative Strength"
+
+# Note: This is a conceptual example for sector rotation
+# Actual implementation would track multiple sector ETFs
+
+# Calculate relative strength vs benchmark (e.g., S&P 500)
+# In practice: relative_strength = (close / benchmark_close) / (close[20] / benchmark_close[20])
+
+# Simulate relative strength using rate of change
+roc_10 = roc(close, 10)   # 10-day rate of change
+roc_30 = roc(close, 30)   # 30-day rate of change
+
+# Moving average for trend confirmation
+ma_50 = sma(close, 50)
+ma_200 = sma(close, 200)
+
+# Trend strength: Both short and medium term momentum positive
+strong_momentum = roc_10 > 0 and roc_30 > 0
+
+# Overall market trend: Above 200-day MA
+bullish_market = close > ma_200
+
+# Entry: Buy sectors showing strong relative strength in bull market
+buy when strong_momentum and bullish_market and close > ma_50
+
+# Exit: Sell when momentum weakens or market turns bearish
+sell when (roc_10 < 0 and roc_30 < 0) or close < ma_200
+
+# Plot momentum indicators
+plot(roc_10, "10-Day ROC", color=blue)
+plot(roc_30, "30-Day ROC", color=orange)
+plot(0, "Zero Line", color=black, style=dotted)
+plot(ma_50, "MA(50)", color=green)
+plot(ma_200, "MA(200)", color=red)
