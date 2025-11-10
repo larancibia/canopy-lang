@@ -1,0 +1,23 @@
+strategy "MACD Divergence"
+
+# Calculate MACD
+macd_line, signal_line, histogram = macd(close, 12, 26, 9)
+
+# Calculate RSI for divergence confirmation
+rsi14 = rsi(close, 14)
+
+# Entry: Buy on bullish MACD crossover with positive histogram
+# and RSI showing momentum
+buy when crossover(macd_line, signal_line) and histogram > 0 and rsi14 > 40
+
+# Exit: Sell on bearish MACD crossover
+sell when crossunder(macd_line, signal_line)
+
+# Alternative exit: Sell when histogram turns negative for 2 bars
+# sell when histogram < 0 and histogram[1] < 0
+
+# Plot MACD components
+plot(macd_line, "MACD Line", color=blue)
+plot(signal_line, "Signal Line", color=red)
+plot(histogram, "Histogram", color=green, style=area)
+plot(0, "Zero Line", color=black, style=dotted)

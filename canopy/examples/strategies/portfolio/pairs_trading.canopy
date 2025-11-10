@@ -1,0 +1,31 @@
+strategy "Pairs Trading - Mean Reversion"
+
+# Note: This is a conceptual example for pairs trading
+# Actual implementation would require multiple symbols
+
+# Calculate spread between two correlated assets
+# In practice, you'd fetch data for both symbols
+# spread = close[SYMBOL_A] - hedge_ratio * close[SYMBOL_B]
+
+# For single-symbol backtest, simulate with price deviation
+price_zscore = (close - sma(close, 20)) / std(close, 20)
+
+# Entry thresholds
+entry_threshold = 2.0   # 2 standard deviations
+exit_threshold = 0.5    # 0.5 standard deviations
+
+# Entry: Buy when spread is significantly below mean (oversold)
+buy when price_zscore < -entry_threshold
+
+# Exit: Sell when spread returns near mean
+sell when price_zscore > -exit_threshold
+
+# Alternative: Short when spread is above mean (would require short selling)
+# short when price_zscore > entry_threshold
+# cover when price_zscore < exit_threshold
+
+# Plot spread z-score
+plot(price_zscore, "Price Z-Score", color=blue)
+plot(entry_threshold, "Upper Threshold", color=red, style=dashed)
+plot(-entry_threshold, "Lower Threshold", color=green, style=dashed)
+plot(0, "Mean", color=black, style=dotted)

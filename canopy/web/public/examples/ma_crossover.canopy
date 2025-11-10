@@ -1,0 +1,15 @@
+strategy "Moving Average Crossover"
+
+// Define moving averages
+fast_ma = sma(close, 10)
+slow_ma = sma(close, 30)
+
+// Entry condition: Fast MA crosses above Slow MA
+buy when crossover(fast_ma, slow_ma)
+
+// Exit condition: Fast MA crosses below Slow MA
+sell when crossunder(fast_ma, slow_ma)
+
+// Plot indicators on the chart
+plot fast_ma
+plot slow_ma

@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: canopy-postgres
+    environment:
+      POSTGRES_USER: canopy
+      POSTGRES_PASSWORD: canopy_dev_password
+      POSTGRES_DB: canopy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canopy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - canopy-network
+
+  # Redis for job queue and caching
+  redis:
+    image: redis:7-alpine
+    container_name: canopy-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - canopy-network
+
+  # FastAPI Backend
+  canopy-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: canopy-api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://canopy:canopy_dev_password@postgres:5432/canopy
+      - YAHOO_FINANCE_ENABLED=true
+      - LOG_LEVEL=INFO
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+    volumes:
+      # Mount source code for hot reload in development
+      - ./src:/app/src
+      - ./examples:/app/examples
+      - ./tests:/app/tests
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - canopy-network
+    command: poetry run uvicorn canopy.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Frontend
+  canopy-web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: development
+    container_name: canopy-web
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    volumes:
+      # Mount source for hot reload
+      - ./web/src:/app/src
+      - ./web/public:/app/public
+      - ./web/index.html:/app/index.html
+    depends_on:
+      - canopy-api
+    networks:
+      - canopy-network
+    command: npm run dev -- --host 0.0.0.0
+
+  # Production web build (nginx)
+  canopy-web-prod:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      target: production
+    container_name: canopy-web-prod
+    ports:
+      - "8080:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - canopy-api
+    networks:
+      - canopy-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  canopy-network:
+    driver: bridge

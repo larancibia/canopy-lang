@@ -1,0 +1,19 @@
+strategy "RSI Mean Reversion"
+
+# Calculate RSI
+rsi14 = rsi(close, 14)
+
+# Moving average trend filter (only trade in uptrend)
+ma200 = sma(close, 200)
+
+# Entry: Buy when oversold and above long-term trend
+buy when rsi14 < 30 and close > ma200
+
+# Exit: Sell when overbought
+sell when rsi14 > 70
+
+# Plot indicators
+plot(rsi14, "RSI(14)", color=purple)
+plot(30, "Oversold Level", color=green, style=dashed)
+plot(70, "Overbought Level", color=red, style=dashed)
+plot(ma200, "MA(200)", color=blue)

@@ -1,0 +1,18 @@
+strategy "Volume Breakout"
+
+# Calculate volume average
+vol_avg = sma(volume, 20)
+
+# Calculate price range
+high_20 = highest(high, 20)
+low_20 = lowest(low, 20)
+
+# Entry: Buy on high volume breakout above 20-day high
+buy when close > high_20 and volume > (vol_avg * 1.5)
+
+# Exit: Sell when price falls below 20-day low
+sell when close < low_20
+
+# Plot indicators
+plot(high_20, "20-Day High", color=green, style=dashed)
+plot(low_20, "20-Day Low", color=red, style=dashed)

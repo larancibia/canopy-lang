@@ -1,0 +1,28 @@
+strategy "ATR Breakout with Trailing Stop"
+
+# Calculate Average True Range for volatility
+atr14 = atr(14)
+
+# Calculate donchian channels (20-period high/low)
+highest_20 = highest(high, 20)
+lowest_20 = lowest(low, 20)
+channel_middle = (highest_20 + lowest_20) / 2
+
+# Entry: Buy on breakout above 20-day high with sufficient volatility
+# Only enter if ATR is not too high (avoid volatile conditions)
+max_atr = sma(atr14, 50) * 1.5
+buy when close > highest_20 and atr14 < max_atr
+
+# Dynamic stop loss based on ATR (2x ATR below entry)
+stop_loss_distance = atr14 * 2
+
+# Trailing stop: Exit if price falls below (highest close since entry - 2*ATR)
+# sell when close < (entry_price - stop_loss_distance)
+
+# Alternative exit: Exit on 20-day low breach
+sell when close < lowest_20
+
+# Plot channels and ATR
+plot(highest_20, "20-Day High", color=green, style=dashed)
+plot(lowest_20, "20-Day Low", color=red, style=dashed)
+plot(channel_middle, "Channel Middle", color=blue, style=dotted)

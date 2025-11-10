@@ -1,0 +1,15 @@
+strategy "EMA Crossover"
+
+# Define exponential moving averages
+fast_ema = ema(close, 12)
+slow_ema = ema(close, 26)
+
+# Entry: Buy when fast EMA crosses above slow EMA
+buy when crossover(fast_ema, slow_ema)
+
+# Exit: Sell when fast EMA crosses below slow EMA
+sell when crossunder(fast_ema, slow_ema)
+
+# Plot indicators
+plot(fast_ema, "EMA(12)", color=blue)
+plot(slow_ema, "EMA(26)", color=red)
