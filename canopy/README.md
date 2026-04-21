@@ -2,9 +2,13 @@
 
 A powerful, expressive domain-specific language (DSL) for trading strategy development and backtesting.
 
-[![Tests](https://github.com/canopy-lang/canopy/actions/workflows/tests.yml/badge.svg)](https://github.com/canopy-lang/canopy/actions/workflows/tests.yml)
-[![Docker Build](https://github.com/canopy-lang/canopy/actions/workflows/docker-build.yml/badge.svg)](https://github.com/canopy-lang/canopy/actions/workflows/docker-build.yml)
-[![codecov](https://codecov.io/gh/canopy-lang/canopy/branch/main/graph/badge.svg)](https://codecov.io/gh/canopy-lang/canopy)
+> ⚠️  **Alpha release (v0.0.1)** — The core DSL, parser, backtest engine, optimizers (Bayesian/Genetic/Grid), and metrics are working (264 unit tests passing). **Data provider adapters (Yahoo Finance, CSV) are not yet implemented in this release** — bring your own `pandas.DataFrame` of OHLC data for now. The REST API and web frontend mentioned below are experimental and require `pip install canopy-lang[web]`. API may change before 1.0.
+
+
+
+[![Tests](https://github.com/larancibia/canopy-lang/actions/workflows/tests.yml/badge.svg)](https://github.com/larancibia/canopy-lang/actions/workflows/tests.yml)
+[![Docker Build](https://github.com/larancibia/canopy-lang/actions/workflows/docker-build.yml/badge.svg)](https://github.com/larancibia/canopy-lang/actions/workflows/docker-build.yml)
+[![codecov](https://codecov.io/gh/larancibia/canopy-lang/branch/main/graph/badge.svg)](https://codecov.io/gh/larancibia/canopy-lang)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -26,7 +30,7 @@ A powerful, expressive domain-specific language (DSL) for trading strategy devel
 
 ```bash
 # Clone the repository
-git clone https://github.com/canopy-lang/canopy.git
+git clone https://github.com/larancibia/canopy-lang.git
 cd canopy
 
 # Start all services
@@ -201,7 +205,7 @@ poetry run pytest --cov=src/canopy --cov-report=html
 
 ```bash
 # Clone repository
-git clone https://github.com/canopy-lang/canopy.git
+git clone https://github.com/larancibia/canopy-lang.git
 cd canopy
 
 # Install with Poetry
@@ -215,8 +219,8 @@ pip install canopy-lang
 
 ```bash
 # Pull images
-docker pull ghcr.io/canopy-lang/canopy/api:latest
-docker pull ghcr.io/canopy-lang/canopy/web:latest
+docker pull ghcr.io/larancibia/canopy-lang/api:latest
+docker pull ghcr.io/larancibia/canopy-lang/web:latest
 
 # Run with Docker Compose
 docker-compose up
@@ -272,10 +276,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Documentation**: [docs.canopy-lang.com](https://docs.canopy-lang.com)
-- **Issues**: [GitHub Issues](https://github.com/canopy-lang/canopy/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/canopy-lang/canopy/discussions)
-- **Email**: support@canopy-lang.com
+- **Documentation**: [github.com/larancibia/canopy-lang#readme](https://github.com/larancibia/canopy-lang#readme)
+- **Issues**: [GitHub Issues](https://github.com/larancibia/canopy-lang/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/larancibia/canopy-lang/discussions)
+- **Email**: arancibialuisalejandro@gmail.com
 
 ## 🙏 Acknowledgments
 
@@ -285,6 +289,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ by the Canopy Team**
+**Made with ❤️ by Luis Arancibia**
 
 ⭐ Star us on GitHub if you find this project helpful!
