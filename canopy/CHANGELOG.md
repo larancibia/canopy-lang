@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full CLI integration with data providers
 - Documentation site
 
+## [0.0.4] - 2026-04-23
+
+### Added
+- `examples/quickstart_byod.py` — self-contained example showing how to run a backtest with a synthetic OHLC DataFrame (no data providers required). Exits cleanly and prints Sharpe / Return / MDD / Trades.
+- README: new "Quickstart (alpha, bring your own data)" section documenting the programmatic API.
+
+### Notes
+- Data providers (Yahoo, CSV) still not implemented — the BYOD pattern is the supported path in this release.
+
 ## [0.0.3] - 2026-04-23
 
 ### Fixed

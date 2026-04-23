@@ -12,6 +12,61 @@ A powerful, expressive domain-specific language (DSL) for trading strategy devel
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Quickstart (alpha, bring your own data)
+
+The simplest way to run a backtest today — no data provider adapter needed. Bring a `pandas.DataFrame` (or the four `pd.Series` shown below) and go:
+
+```python
+from canopy.domain.timeseries import TimeSeries
+from canopy.domain.strategy import MACrossoverStrategy
+from canopy.adapters.engines.simple_engine import SimpleBacktestEngine
+from canopy.application.run_backtest import RunBacktestUseCase
+import pandas as pd
+import numpy as np
+
+# Synthetic OHLC via random walk
+dates = pd.date_range("2024-01-01", periods=252, freq="D")
+np.random.seed(42)
+close = 100 + np.cumsum(np.random.randn(252) * 2)
+ts = TimeSeries(
+    open=pd.Series(close - 0.5, index=dates),
+    high=pd.Series(close + 1, index=dates),
+    low=pd.Series(close - 1, index=dates),
+    close=pd.Series(close, index=dates),
+    volume=pd.Series([1_000_000] * 252, index=dates),
+)
+
+strategy = MACrossoverStrategy(name="SMA 10/30", fast_period=10, slow_period=30)
+engine = SimpleBacktestEngine()
+use_case = RunBacktestUseCase(engine)
+backtest, metrics = use_case.execute(
+    strategy, ts,
+    initial_capital=10_000.0,
+    commission=0.001,
+    slippage=0.0,
+)
+
+print(f"Total Return:   {metrics.total_return:.2f}%")
+print(f"Sharpe Ratio:   {metrics.sharpe_ratio:.2f}")
+print(f"Max Drawdown:   {metrics.max_drawdown:.2f}%")
+print(f"Total Trades:   {metrics.total_trades}")
+print(f"Win Rate:       {metrics.win_rate:.2f}%")
+```
+
+Expected output (approximate):
+
+```
+Total Return:   -4.70%
+Sharpe Ratio:   -0.01
+Max Drawdown:   -16.22%
+Total Trades:   5
+Win Rate:       40.00%
+```
+
+A runnable copy lives at [`examples/quickstart_byod.py`](examples/quickstart_byod.py).
+
+> **Note:** The CLI commands like `canopy backtest --symbol AAPL` shown elsewhere in this README will be available when data provider adapters ship (tracked in issues). For now, the programmatic API above is the recommended path.
+
 ## ✨ Features
 
 - **📝 Intuitive DSL**: Write trading strategies in a clear, expressive language

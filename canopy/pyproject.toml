@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "canopy-lang"
-version = "0.0.3"
+version = "0.0.4"
 description = "A domain-specific language for trading strategy development and backtesting"
 authors = ["Luis Arancibia <arancibialuisalejandro@gmail.com>"]
 license = "MIT"
