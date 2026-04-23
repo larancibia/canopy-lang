@@ -38,7 +38,7 @@ def crossover(series1: pd.Series, series2: pd.Series) -> pd.Series:
         Boolean series where True indicates crossover
     """
     above = series1 > series2
-    return above & ~above.shift(1).fillna(False)
+    return above & ~above.shift(1, fill_value=False)
 
 
 def crossunder(series1: pd.Series, series2: pd.Series) -> pd.Series:
@@ -49,4 +49,4 @@ def crossunder(series1: pd.Series, series2: pd.Series) -> pd.Series:
         Boolean series where True indicates crossunder
     """
     below = series1 < series2
-    return below & ~below.shift(1).fillna(False)
+    return below & ~below.shift(1, fill_value=False)

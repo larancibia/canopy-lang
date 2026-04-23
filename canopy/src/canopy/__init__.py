@@ -5,7 +5,7 @@ Canopy makes algorithmic trading accessible through a clean, readable syntax
 and powerful backtesting capabilities.
 """
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 __author__ = "Canopy Team"
 __license__ = "MIT"
 

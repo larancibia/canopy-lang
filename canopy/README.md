@@ -2,7 +2,7 @@
 
 A powerful, expressive domain-specific language (DSL) for trading strategy development and backtesting.
 
-> ⚠️  **Alpha release (v0.0.1)** — The core DSL, parser, backtest engine, optimizers (Bayesian/Genetic/Grid), and metrics are working (264 unit tests passing). **Data provider adapters (Yahoo Finance, CSV) are not yet implemented in this release** — bring your own `pandas.DataFrame` of OHLC data for now. The REST API and web frontend mentioned below are experimental and require `pip install canopy-lang[web]`. API may change before 1.0.
+> ⚠️  **Alpha release (alpha)** — The core DSL, parser, backtest engine, optimizers (Bayesian/Genetic/Grid), and metrics are working (264 unit tests passing). **Data provider adapters (Yahoo Finance, CSV) are not yet implemented in this release** — bring your own `pandas.DataFrame` of OHLC data for now. The REST API and web frontend mentioned below are experimental and require `pip install canopy-lang[web]`. API may change before 1.0.
 
 
 

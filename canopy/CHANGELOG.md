@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full CLI integration with data providers
 - Documentation site
 
+## [0.0.5] - 2026-04-23
+
+### Fixed
+- `signal.py`: replace `.shift(1).fillna(False)` with `.shift(1, fill_value=False)` in `crossover()` and `crossunder()` to silence pandas 2.x `FutureWarning`. Semantics identical; all 8 existing signal tests pass unchanged.
+- README banner: change hardcoded `v0.0.1` to generic `alpha` so it does not need bumping each release.
+
+### Notes
+- API unchanged; drop-in replacement for 0.0.4.
+
 ## [0.0.4] - 2026-04-23
 
 ### Added
