@@ -13,6 +13,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full CLI integration with data providers
 - Documentation site
 
+## [0.0.3] - 2026-04-23
+
+### Fixed
+- **Missing module in wheel**: v0.0.2 wheel did not include `canopy/adapters/data/` because a stray `.gitignore` rule excluded it. Files now force-added and shipped in the distribution.
+- **v0.0.1 and v0.0.2 have been yanked from PyPI** — please use `pip install canopy-lang>=0.0.3`.
+
+## [0.0.2] - 2026-04-23
+
+### Fixed
+- **CLI import error**: `canopy --help` failed with `ModuleNotFoundError: canopy.adapters.data`. Added stub `DataProviderFactory` so CLI imports succeed; it raises a clear `NotImplementedError` with guidance when data providers are requested.
+- **Typer/Click incompatibility**: bumped `typer` dep from `^0.9.0` to `^0.12` to fix `Parameter.make_metavar()` error on recent Click versions.
+- **Version mismatch**: `canopy version` now reports the real package version (was hardcoded to 0.1.0 while package was 0.0.1).
+
+### Notes
+- Data provider adapters (Yahoo Finance, CSV) still not implemented. The stub raises a `NotImplementedError` pointing to the issue tracker.
+- **v0.0.1 has been yanked from PyPI** — please use `pip install canopy-lang>=0.0.2`.
+
 ## [0.0.1] - 2026-04-21
 
 ### Added
